@@ -40,7 +40,7 @@
 
 4. Создайте приложение в [Discord Developer Portal](https://discord.com/developers/applications). Назовите приложение «Spotify». В «App Icon», «Cover Image», Rich Presence Assets (Rich Presence --> Art Assets) установите иконку Spotify для корректного отображения в активности. В разделе OAuth2 скопируйте «CLIENT ID».
 
-5. Создайте приложение в [Spotify for Developers](https://developer.spotify.com/dashboard). Назовите приложение, напишите описание. В «Redirect URIs» укажите «[https://localhost:8888/callback](https://localhost:8888/callback)» (без кавычек). Ниже поставьте галочки у «Web API» и «Web Playback SDK». После создания приложения в «Settings» скопируйте «Client ID» и «Client secret».
+5. Создайте приложение в [Spotify for Developers](https://developer.spotify.com/dashboard). Назовите приложение, напишите описание. В «Redirect URIs» укажите «[http://localhost:8888/callback](http://localhost:8888/callback)» (без кавычек). Ниже поставьте галочки у «Web API» и «Web Playback SDK». После создания приложения в «Settings» скопируйте «Client ID» и «Client secret».
 
 6. В файле ds.js вставьте в соответствующие строки ранее скопированные данные.
    
