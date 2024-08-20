@@ -15,6 +15,7 @@
 - [Node.js](https://nodejs.org) (v14 и выше)
 - Аккаунт Spotify
 - Аккаунт Discord
+- Установленный клиент Discord (без этого RPC не работает)
 
 ## Установка
 
