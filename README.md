@@ -35,7 +35,7 @@
   - [express](https://www.npmjs.com/package/discord-rpc)
   - [spotify-web-api-node](https://www.npmjs.com/package/spotify-web-api-node)
   - [discord-rpc](https://www.npmjs.com/package/express)
-  - [puppeteer](https://www.npmjs.com/package/fs)
+  - [fs](https://www.npmjs.com/package/fs)
   - [open](https://www.npmjs.com/package/open)
 
 4. Создайте приложение в [Discord Developer Portal](https://discord.com/developers/applications). Назовите приложение «Spotify». В «App Icon», «Cover Image», Rich Presence Assets (Rich Presence --> Art Assets) установите иконку Spotify для корректного отображения в активности. В разделе OAuth2 скопируйте «CLIENT ID».
