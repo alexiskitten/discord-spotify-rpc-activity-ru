@@ -33,9 +33,9 @@
     ```
      
      Отдельный список:
-  - [express](https://www.npmjs.com/package/discord-rpc)
+  - [express](https://www.npmjs.com/package/express)
   - [spotify-web-api-node](https://www.npmjs.com/package/spotify-web-api-node)
-  - [discord-rpc](https://www.npmjs.com/package/express)
+  - [discord-rpc](https://www.npmjs.com/package/discord-rpc)
   - [fs](https://www.npmjs.com/package/fs)
   - [open](https://www.npmjs.com/package/open)
 
