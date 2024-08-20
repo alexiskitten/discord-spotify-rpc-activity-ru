@@ -27,14 +27,23 @@ const spotifyApi = new SpotifyWebApi({
 const tokensPath = 'tokens.json';
 
 function loadTokens() {
-  if (fs.existsSync(tokensPath)) {
-    const tokens = JSON.parse(fs.readFileSync(tokensPath, 'utf-8'));
-    accessToken = tokens.accessToken;
-    refreshToken = tokens.refreshToken;
-    spotifyApi.setAccessToken(accessToken);
-    spotifyApi.setRefreshToken(refreshToken);
-    console.log('Токены были загружены');
-    return true;
+  try {
+    if (fs.existsSync(tokensPath)) {
+      const fileData = fs.readFileSync(tokensPath, 'utf-8');
+      if (fileData.trim()) {
+        const tokens = JSON.parse(fileData);
+        accessToken = tokens.accessToken;
+        refreshToken = tokens.refreshToken;
+        spotifyApi.setAccessToken(accessToken);
+        spotifyApi.setRefreshToken(refreshToken);
+        console.log('Токены были загружены');
+        return true;
+      } else {
+        console.log('Файл tokens.json пустой.');
+      }
+    }
+  } catch (error) {
+    console.error('Ошибка при загрузке токенов:', error);
   }
   return false;
 }
@@ -56,7 +65,7 @@ async function setActivity(track, progressMs, durationMs) {
   const progressSeconds = Math.floor((progressMs % 60000) / 1000).toString().padStart(2, '0');
 
   rpc.setActivity({
-    type: 2,
+    type: 2, // Type 2 corresponds to "Listening"
     details: `Слушает: ${track.name}`,
     state: `Автор: ${track.artists.map(artist => artist.name).join(', ')}`,
     largeImageKey: track.album.images[0].url,
@@ -67,11 +76,22 @@ async function setActivity(track, progressMs, durationMs) {
     startTimestamp: Date.now() - progressMs,
     buttons: [
       { label: 'Слушать в Spotify', url: track.external_urls.spotify },
-      { label: 'Хочу активность', url: 'https://github.com/alexiskitten/discord-spotify-rpc-activity-ru' }
     ]
   });
 
   console.log(`Проиграно: ${progressMinutes}:${progressSeconds}`);
+}
+
+async function refreshSpotifyToken() {
+  try {
+    const data = await spotifyApi.refreshAccessToken();
+    accessToken = data.body.access_token;
+    spotifyApi.setAccessToken(accessToken);
+    saveTokens(accessToken, refreshToken);
+    console.log('Токен обновлен!');
+  } catch (error) {
+    console.error('Ошибка при обновлении токена:', error);
+  }
 }
 
 async function updateActivity() {
@@ -93,7 +113,13 @@ async function updateActivity() {
       rpc.clearActivity();
     }
   } catch (error) {
-    console.error('Ошибка при получении текущего трека:', error);
+    if (error.statusCode === 401) { // 401 означает, что токен истек
+      console.log('Токен доступа истек, пытаюсь обновить...');
+      await refreshSpotifyToken();
+      updateActivity(); // Повторный вызов функции после обновления токена
+    } else {
+      console.error('Ошибка при получении текущего трека:', error);
+    }
   }
 }
 
@@ -139,15 +165,7 @@ app.get('/callback', async (req, res) => {
 // Обновляем токен каждые 30 минут
 setInterval(async () => {
   if (refreshToken) {
-    try {
-      const data = await spotifyApi.refreshAccessToken();
-      accessToken = data.body.access_token;
-      spotifyApi.setAccessToken(accessToken);
-      saveTokens(accessToken, refreshToken);
-      console.log('Токен обновлен!');
-    } catch (error) {
-      console.error('Ошибка при обновлении токена:', error);
-    }
+    await refreshSpotifyToken();
   }
 }, 1800000); // 30 минут
 
