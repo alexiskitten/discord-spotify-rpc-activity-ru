@@ -67,6 +67,7 @@ async function setActivity(track, progressMs, durationMs) {
     startTimestamp: Date.now() - progressMs,
     buttons: [
       { label: 'Слушать в Spotify', url: track.external_urls.spotify },
+      { label: 'Хочу активность', url: 'https://github.com/alexiskitten/discord-spotify-rpc-activity-ru' }
     ]
   });
 
